@@ -1,0 +1,135 @@
+---
+import Country from "./Country.astro"
+---
+
+<section class="country-grid container">
+  <Country />
+</section>
+
+<style>
+  .country-grid {
+    margin-top: 2.6em;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns:
+      repeat(auto-fit,
+             minmax(252px, 1fr));
+    gap: 4em;
+  }
+
+  @media (width <= 1235px) {
+    .country-grid {
+      gap: 2em;
+    }
+  }
+</style>
+
+<script>
+  import countries from "../pages/countries/data.json" with { type: "json" }
+
+  const countryGrid = document.querySelector(".country-grid") as HTMLElement
+  const countryCard = document.querySelector(".country-card") as HTMLElement
+  countryCard.remove()
+  
+  function append(country) {
+    countryCard.style.display = "grid"
+    let newCountry = document.createElement("div")
+    newCountry.innerHTML = countryCard.outerHTML
+    countryGrid.appendChild(newCountry)
+    
+    const flagSvg = newCountry.querySelector(".country-svg") as HTMLSourceElement
+    const flagPng = newCountry.querySelector(".country-png") as HTMLImageElement
+    flagSvg.srcset = country.flags.svg
+    flagPng.src = country.flags.png
+
+    const countryCode = newCountry.querySelector(".country-card") as HTMLAnchorElement
+    countryCode.href = `/countries/${country.alpha3Code.toLowerCase()}`
+
+    const countryName = newCountry.querySelector(".country-name") as HTMLElement
+    countryName.textContent = country.name
+
+    const countryPopulation = newCountry.querySelector(".country-population") as HTMLElement
+    countryPopulation.textContent = country.population.toLocaleString()
+
+    const countryRegion = newCountry.querySelector(".country-region") as HTMLElement
+    countryRegion.textContent = country.region
+
+    const countryCapital = newCountry.querySelector(".country-capital") as HTMLElement
+    countryCapital.textContent = country.capital
+  }
+
+  countries.forEach(country => {
+    append(country)
+  })
+
+  const userInput = document.querySelector("#user-country") as HTMLInputElement
+  const form = document.querySelector("#searchbar") as HTMLFormElement
+  const filter = document.querySelector(".filter-btn") as HTMLButtonElement
+  const filterTitle = document.querySelector(".filter-title") as HTMLElement
+  const filterDropdown = document.querySelector(".regions") as HTMLElement
+  const regions = document.querySelectorAll<HTMLElement>(".regions p")
+  const clearFilter = document.querySelector(".clear-filter") as HTMLElement
+
+  let countriesSearch = []
+  let filterTitleTxt = filterTitle.textContent
+  
+  filter.addEventListener("click", () => {
+    filterDropdown.toggleAttribute("open")
+
+    regions.forEach(region => {
+      filterTitle.textContent == region.textContent
+      ? region.style.display = "none"
+      : region.style.display = "block"
+      
+      region.addEventListener("click", () => {
+        clearFilter.classList.add("active")
+        filterDropdown.removeAttribute("open")
+        filterTitle.textContent = region.textContent
+
+        countriesSearch = []
+        countryGrid.innerHTML = ""
+        countries.forEach(country => {
+          country.region.toLowerCase().startsWith(region.textContent.toLowerCase())
+          ? countriesSearch.push(country)
+          : ""
+        })
+        countriesSearch.forEach(country => {
+          append(country)
+        })
+      })
+    })
+
+    clearFilter.addEventListener("click", () => {
+      clearFilter.classList.remove("active")
+      filterTitle.textContent = filterTitleTxt
+      filterDropdown.removeAttribute("open")
+      countriesSearch = []
+      countryGrid.innerHTML = ""
+      countries.forEach(country => {
+        append(country)
+      })
+    })
+  })
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    console.log("Form submission prevented.");
+  });
+  
+  userInput.addEventListener("input", () => {
+    if (isNaN(parseInt(userInput.value))) {
+      countriesSearch = []
+      countryGrid.innerHTML = ""
+      countries.forEach(country => {
+        country.name.toLowerCase().startsWith(userInput.value.trim().toLowerCase())
+        ? countriesSearch.push(country)
+        : ""
+      })
+      countriesSearch.forEach(country => {
+        append(country)
+      })
+    }
+  })
+
+</script>

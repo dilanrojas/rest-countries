@@ -1,0 +1,224 @@
+---
+import COUNTRIES from "./data.json" with { type: "json" }
+import Layout from "../../layouts/Layout.astro";
+import BackButton from "../../components/BackButton.astro";
+
+export function getStaticPaths() {
+  return COUNTRIES.flatMap((country) => {
+    return [
+      { params: {code: country.alpha3Code.toLowerCase()}}
+    ]
+  })
+}
+
+const { code } = Astro.params
+
+const currentCountry = COUNTRIES.find(country => country.alpha3Code.toLowerCase() === code)
+
+// Country Information
+let flagSvg = currentCountry.flags.svg
+let flagPng = currentCountry.flags.png
+let countryName = currentCountry.name
+let nativeName = currentCountry.nativeName
+let population = currentCountry.population.toLocaleString()
+let region = currentCountry.region
+let subRegion = currentCountry.subregion
+let capital = currentCountry.capital
+let topLevelDomain = currentCountry.topLevelDomain
+
+// Currencies
+let currencies
+currentCountry.currencies == null
+  ? currencies = "None"
+  : currencies = currentCountry.currencies.map(currency => currency.name).join(', ')
+
+// Languages
+let languages
+currentCountry.languages == null
+  ? languages = "None"
+  : languages = currentCountry.languages.map(language => language.name).join(', ')
+
+---
+
+<Layout>
+
+  <div class="back-btn-wrapper container">
+    <BackButton />
+  </div>
+
+  <main>
+    <div class="country-info-big container">
+
+      <div class="picture-wrapper">
+        <picture>
+          <source class="country-svg" srcset={flagSvg} type="image/svg+xml">
+          <img class="country-png" src={flagPng} alt="Country Flag">
+        </picture>
+      </div>
+
+      <div class="info-wrapper">
+        <h1 class="country-name">{countryName}</h1>
+        <div class="info-columns">
+          <div>
+            <p>Native Name: <span class="native-name">{nativeName}</span></p>
+            <p>Population: <span class="population">{population}</span></p>
+            <p>Region: <span class="region">{region}</span></p>
+            <p>Sub Region: <span class="sub-region">{subRegion}</span></p>
+            <p>Capital: <span class="capital">{capital}</span></p>
+          </div>
+          <div>
+            <p>Top Level Domain: <span class="top-level-domain">{topLevelDomain}</span></p>
+            <p>Currencies: <span class="currencies">{currencies}</span></p>
+            <p>Languages: <span class="languages">{languages}</span></p>
+          </div>
+        </div>
+        <div class="border-countries-info">
+          <p>Border Countries: </p>
+          <div class="border-countries">
+            <span class="border-country"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</Layout>
+
+<style>
+  .back-btn-wrapper {
+    display: flex;
+    padding: 3.5em 0em;
+    align-items: center;
+  }
+
+  .country-info-big {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7em;
+    align-items: start;
+    animation: fade .3s forwards;
+    padding-bottom: 2.5em;
+  }
+
+  .picture-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .country-info-big img,
+  .country-info-big svg {
+    width: 100%;
+    box-shadow: var(--box-shadow);
+  }
+
+  .info-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    h1 {
+      margin-bottom: 1em;
+      font-weight: 800;
+    }
+  }
+  
+  p {
+    color: var(--text);
+    font-weight: 600;
+  }
+  
+  span {
+    color: var(--text-info);
+    font-weight: 400;
+  }
+
+  .info-columns {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3.5em;
+    gap: 2em;
+  }
+
+  .border-countries {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5em;
+  }
+
+  .border-countries-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8em
+  }
+
+  .border-country {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-bg);
+    min-width: 100px;
+    min-height: 30px;
+    padding-inline: 1em;
+    font-size: .9em;
+    box-shadow: rgb(0, 0, 0, .2) 0px 0px 5px;
+  }
+
+  @media (width <= 1200px) {
+    .country-info-big {
+      gap: 4em;
+    }
+  }
+
+  @media (width <= 940px) {
+    .info-columns {
+      flex-direction: column;
+      gap: 3em
+    }
+
+    .border-countries-info {
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+
+  @media (width <= 660px) {
+    .country-info-big {
+      grid-template-columns: 1fr;
+      gap: 3.5em;
+    }
+  }
+
+</style>
+
+<script>
+  import COUNTRIES from "./data.json" with { type: "json" }
+  
+  const borderCountries = document.querySelector(".border-countries") as HTMLElement
+  const borderCountry = document.querySelector(".border-country") as HTMLElement
+  borderCountry.remove()
+
+  const countryName = document.querySelector(".country-name").textContent
+  const currentCountry = COUNTRIES.find(country => country.name === countryName)
+  
+  if (currentCountry.borders == null) {
+    let noBorder = document.createElement("div")
+    noBorder.innerHTML = borderCountry.outerHTML
+    noBorder.querySelector(".border-country").textContent = "None"
+    borderCountries.appendChild(noBorder)
+  } else {
+    currentCountry.borders.forEach(border => {
+      let newBorder = document.createElement("a")
+      newBorder.innerHTML = borderCountry.outerHTML
+      newBorder.href = "/countries/" + border.toLowerCase()
+  
+      const borderName = COUNTRIES.find(country => country.alpha3Code === border).name
+  
+      newBorder.querySelector(".border-country").textContent = borderName
+      borderCountries.appendChild(newBorder)
+    })
+  }
+
+</script>

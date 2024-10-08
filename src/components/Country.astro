@@ -1,0 +1,62 @@
+<a class="country-card" href="">
+  <div>
+    <picture>
+      <source class="country-svg" srcset="" type="image/svg+xml">
+      <img class="country-png" src="" alt="Country Flag">
+    </picture>
+  
+    <div class="country-info">
+      <h1 class="country-name"></h1>
+      <p>Population: <span class="country-population"></span></p>
+      <p>Region: <span class="country-region"></span></p>
+      <p>Capital: <span class="country-capital"></span></p>
+    </div>
+  </div>
+</a>
+
+<style>
+  .country-card {
+    display: none;
+    grid-template-columns: 1fr;
+    height: 100%;
+    width: 252px;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius);
+    background-color: var(--primary-bg);
+    transition: transform .12s ease-out;
+  }
+
+  .country-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .country-card img,
+  .country-card svg {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: var(--radius) var(--radius) 0px 0px;
+  }
+
+  .country-info {
+    min-height: calc(var(--card-height) - 10px);
+    padding: 1rem;
+    margin-bottom: 1em;
+    font-size: .9em;
+
+    h1 {
+      font-size: 1.2em;
+      margin-bottom: 1em;
+      font-weight: 800;
+    }
+
+    p {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    span {
+      color: var(--text-info);
+    }
+  }
+</style>

@@ -1,0 +1,176 @@
+<section class="filterbar container">
+  <form action="" id="searchbar">
+    <label for="user-country">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </label>
+    <input
+      name="user-country"
+      id="user-country"
+      type="text"
+      placeholder="Search for a country..."
+      autocomplete="off"
+    >
+  </form>
+  <div class="filter">
+    <div class="filter-btn">
+      <p class="filter-title">Filter by Region</p>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+
+    <div class="regions">
+      <p>Africa</p>
+      <p>America</p>
+      <p>Asia</p>
+      <p>Europe</p>
+      <p>Oceania</p>
+
+      <span class="clear-filter">Clear filter</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .filterbar {
+    --height: 50px;
+
+    margin-top: 2.6em;
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  #searchbar {
+    display: flex;
+    align-items: center;
+    padding-left: 1.7em;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius);
+    gap: .8em;
+    min-width: 420px;
+    background-color: var(--primary-bg);
+
+    label {
+      margin-right: .7em;
+      color: var(--secondary-text);
+    }
+
+    input {
+      height: var(--height);
+      width: 75%;
+      border: 0;
+      color: var(--text);
+      background-color: var(--primary-bg);
+    }
+
+    input::placeholder {
+      color: var(--secondary-text);
+      font-size: .9em;
+    }
+
+    input:focus {
+      outline: 0;
+    }
+  }
+
+  .filter {
+    width: 195.8px;
+    height: var(--height);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius);
+    position: relative;
+    background-color: var(--primary-bg);
+    z-index: 90;
+    
+    & > div:first-child {
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: .8em 1.5em;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+      -webkit-user-select: none;
+
+      i {
+        font-size: .7em;
+        /* transform: rotate(180deg); */
+      }
+    }
+  }
+
+  .regions {
+    display: none;
+    gap: .3em;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 110%;
+    background-color: var(--primary-bg);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius);
+    padding: .8em 1.5em;
+    
+    /* Animation */
+    opacity: 0;
+    transition: opacity .15s ease-out,
+      display 2s ease-out allow-discrete;
+
+    p {
+      cursor: pointer;
+      transition: color .12s ease-out;
+    }
+
+    p:hover {
+      color: var(--secondary-text)
+    }
+
+  }
+  
+  .regions[open] {
+    display: flex;
+
+    /* Animation */
+    opacity: 1;
+    transition: opacity .15s ease-out;
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .clear-filter {
+    display: none;
+    margin-top: 1em;
+  }
+
+  .clear-filter.active {
+    display: block;
+    color: tomato;
+    cursor: pointer;
+    transition: opacity .15s ease-out;
+  }
+
+  .clear-filter:hover {
+    opacity: .6;
+  }
+
+  @media (width <= 675px) {
+    .filterbar {
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    #searchbar {
+      min-width: 100%;
+    }
+
+    .regions {
+      gap: 1em;
+    }
+
+    .clear-filter {
+      margin-top: 1.3em;
+    }
+  }
+</style>

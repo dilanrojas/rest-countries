@@ -1,0 +1,152 @@
+---
+import Header from '../components/Header.astro';
+const theme = Astro.cookies.get("theme")?.value;
+---
+
+<!doctype html>
+<html lang="en" class={theme}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="public/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Rest Countries Api | Frontend Mentor Challenge</title>
+	</head>
+	<body >
+		<Header />
+		<slot />
+
+		<script src="https://kit.fontawesome.com/92992ef526.js" crossorigin="anonymous"></script>
+	</body>
+</html>
+<style is:global>
+	@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+	:root {
+		--ff-html: "Nunito Sans", sans-serif;
+    --shadow: rgb(0, 0, 0, .05);
+		--box-shadow: 2px 2px 15px var(--shadow), -2px -2px 10px var(--shadow);
+    --radius: 7px;
+
+		/* Color scheme */
+		--very-dark-blue: hsl(200, 15%, 8%);
+		--dark-gray: hsl(0, 0%, 52%);
+		--white: hsl(0, 0%, 100%);
+		--dark-blue: hsl(209, 23%, 22%);
+		--darker-blue: hsl(207, 26%, 17%);
+		
+		/* Light Mode */
+		--lm-text: var(--very-dark-blue);
+		--lm-bg-body: var(--white);
+		--lm-bg-primary: var(--white);
+		--lm-secondary-text: var(--dark-gray);
+		--lm-text-info: var(--dark-blue);
+
+		/* Dark Mode */
+		--dm-text: var(--white);
+		--dm-bg-body: var(--darker-blue);
+		--dm-bg-primary: var(--dark-blue);
+		--dm-secondary-text: var(--dark-gray);
+		--dm-text-info: var(--dark-gray);
+
+		--text: var(--lm-text);
+		--bg-body: var(--lm-bg-body);
+		--primary-bg: var(--lm-bg-primary);
+		--secondary-text: var(--lm-secondary-text);
+		--text-info: var(--lm-text-info);
+		color-scheme: light;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--text: var(--dm-text);
+			--bg-body: var(--dm-bg-body);
+			--primary-bg: var(--dm-bg-primary);
+			--secondary-text: var(--dm-secondary-text);
+			--text-info: var(--dm-text-info);
+			color-scheme: dark;
+		}
+	}
+
+	html.dark {
+	  --text: var(--dm-text);
+		--bg-body: var(--dm-bg-body);
+		--primary-bg: var(--dm-bg-primary);
+		--secondary-text: var(--dm-secondary-text);
+		--text-info: var(--dm-text-info);
+		color-scheme: dark;
+	}
+
+	html.light {
+		--text: var(--lm-text);
+		--bg-body: var(--lm-bg-body);
+		--primary-bg: var(--lm-bg-primary);
+		--secondary-text: var(--lm-secondary-text);
+		--text-info: var(--lm-text-info);
+		color-scheme: light;
+	}
+
+	body {
+		background-color: var(--bg-body);
+		transition: background-color .15s ease-in-out;
+	}
+
+	html {
+		font-family: var(--ff-html);
+		font-size: 16px;
+		line-height: 1.5;
+		overflow-y: scroll;
+	}
+
+	@keyframes fade {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+	}
+
+	*::after, *::before, * {
+		box-sizing: border-box;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		line-height: 1;
+	}
+
+	input, textarea, button {
+		font-size: inherit;
+		font-size: inherit;
+	}
+	
+	a {
+		text-decoration: none;
+		color: currentColor
+	}
+
+	/* Utility classes */
+	.container {
+		--width: var(--custom-width, 1200px);
+		--padding: var(--custom-padding, 1rem);
+
+		width: min(var(--width), 100% - (var(--padding) * 2));
+		margin-inline: auto;
+	}
+
+	.flow > * + * {
+		margin-top: var(--flow-space, .3em)
+	}
+
+	button {
+		color: var(--text);
+		cursor: pointer;
+		border: 0;
+	}
+</style>

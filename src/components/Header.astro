@@ -61,7 +61,9 @@
     currentTheme = "light"
   } else {
     currentTheme = "dark"
-    moonIco.classList.replace("fa-regular", "fa-solid")
+    html.classList.contains("dark")
+    ? moonIco.classList.replace("fa-regular", "fa-solid")
+    : ""
   }
 
   themeBtn.addEventListener("click", () => {

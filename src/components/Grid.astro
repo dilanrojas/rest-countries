@@ -15,7 +15,7 @@ import Country from "./Country.astro"
     grid-template-columns:
       repeat(auto-fit,
              minmax(252px, 1fr));
-    gap: 4em;
+    gap: 3em;
   }
 
   @media (width <= 1235px) {
@@ -23,6 +23,7 @@ import Country from "./Country.astro"
       gap: 2em;
     }
   }
+
 </style>
 
 <script>
@@ -122,14 +123,18 @@ import Country from "./Country.astro"
       countriesSearch = []
       countryGrid.innerHTML = ""
       countries.forEach(country => {
-        country.name.toLowerCase().startsWith(userInput.value.trim().toLowerCase())
-        ? countriesSearch.push(country)
-        : ""
+        const matches = Object.values(country.translations).some(t =>
+          t.toLowerCase().startsWith(userInput.value.trim().toLowerCase())
+        )
+
+        matches
+          ? countriesSearch.push(country)
+          : ""
+
       })
       countriesSearch.forEach(country => {
         append(country)
       })
     }
   })
-
 </script>

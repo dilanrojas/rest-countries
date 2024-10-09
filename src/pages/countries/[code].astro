@@ -3,6 +3,8 @@ import COUNTRIES from "./data.json" with { type: "json" }
 import Layout from "../../layouts/Layout.astro";
 import BackButton from "../../components/BackButton.astro";
 
+export const prerender = false
+
 export function getStaticPaths() {
   return COUNTRIES.flatMap((country) => {
     return [

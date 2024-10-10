@@ -148,6 +148,14 @@ currentCountry.languages == null
     display: flex;
     flex-wrap: wrap;
     gap: .5em;
+
+    span {
+      transition: color .12s ease;
+    }
+
+    span:hover {
+      color: var(--text)
+    }
   }
 
   .border-countries-info {
@@ -208,6 +216,7 @@ currentCountry.languages == null
   if (currentCountry.borders == null) {
     let noBorder = document.createElement("div")
     noBorder.innerHTML = borderCountry.outerHTML
+    noBorder.style.pointerEvents = "none"
     noBorder.querySelector(".border-country").textContent = "None"
     borderCountries.appendChild(noBorder)
   } else {
